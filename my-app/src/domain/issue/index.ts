@@ -58,10 +58,14 @@ export const issueHoursRatio = (issues: Issue[] | OriginalIssueType[]): number =
 };
 
 export const issueSorter = (a: Issue, b: Issue): number => {
-  if (a.priorityScore && b.priorityScore) {
+  if (a.priorityScore !== null && b.priorityScore !== null) {
     return b.priorityScore - a.priorityScore;
-  } else if (a.priorityScore && !b.priorityScore) {
+  }
+  if (a.priorityScore !== null && b.priorityScore === null) {
     return -1;
+  }
+  if (a.priorityScore === 0) {
+    return b.priorityScore ? b.priorityScore : -1;
   }
 
   if (a.power === null) {
