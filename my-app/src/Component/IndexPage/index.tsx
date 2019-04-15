@@ -46,7 +46,8 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     backlogApi.getIssues({
       projectId: [event.value],
       statusId: [1, 2],
-      keyword: ""
+      keyword: "",
+      count: 100,
     }).then((issues: OriginalIssueType[]) => {
       this.setState({
         issues: buildIssueValues(issues),

@@ -6,5 +6,5 @@ export type Row = {
   title: string,
   power: null | number;
   estimatedHours: number;
-  priorityValue: number;
+  priorityValue: number | null;
 }

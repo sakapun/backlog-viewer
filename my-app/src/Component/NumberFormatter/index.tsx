@@ -6,5 +6,5 @@ export const Outer = styled.div`
 `;
 
 export const NumberFormatter = ({value} : {value: number | null}) => {
-  return value ? <Outer>{value}</Outer> : null;
+  return value === null ? null : <Outer>{value}</Outer> ;
 }

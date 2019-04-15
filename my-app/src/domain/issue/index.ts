@@ -21,7 +21,7 @@ export type ExtraField = {
   power: number | null;
   hoursRatio: number;
   priorityValue: number;
-  priorityScore: number;
+  priorityScore: number | null;
 }
 export type Issue = OriginalIssueType & ExtraField
 
@@ -43,8 +43,7 @@ export const buildIssueValues = (issues: OriginalIssueType[]): Issue[] => {
       priorityValue,
       priorityScore: 0 // powerを使って再計算するのでダミー値
     });
-
-    const priorityScore = extraFields.power ? extraFields.power * priorityValue - hoursRatio : 0;
+    const priorityScore = extraFields.power ? _.round(extraFields.power * priorityValue - hoursRatio, 1) : null;
     return {
       ...issue,
       ...extraFields,
@@ -60,7 +59,7 @@ export const issueHoursRatio = (issues: Issue[] | OriginalIssueType[]): number =
 
 export const issueSorter = (a: Issue, b: Issue): number => {
   if (a.priorityScore && b.priorityScore) {
-    return a.priorityScore - b.priorityScore;
+    return b.priorityScore - a.priorityScore;
   } else if (a.priorityScore && !b.priorityScore) {
     return -1;
   }
