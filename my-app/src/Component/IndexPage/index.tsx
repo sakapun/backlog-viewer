@@ -1,10 +1,12 @@
 import React from "react";
 import {backlogApi} from "../../lib/backlog-settings";
 import Select from "react-select";
+import ReactDataGrid from "react-data-grid";
+import {buildDataGridRows, buildIssueValues, Issue, issueSorter, OriginalIssueType} from "../../domain/issue";
 
 type IndexStateTypes = {
   projects: object[];
-  issues: object[];
+  issues: Issue[];
 }
 
 export class IndexPage extends React.Component<any, IndexStateTypes, any> {
@@ -24,9 +26,7 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     return (
       <div>
         <Select options={optionsForProjects} onChange={this.handleChangeProject} />
-        {this.state.issues.map((p: any) => {
-          return <pre>{p.summary}</pre>;
-        })}
+        {this.renderGrid()}
       </div>
     );
   }
@@ -39,8 +39,31 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
       projectId: [event.value],
       statusId: [1, 2],
       keyword: ""
-    }).then((issues) => this.setState({
-      issues
-    }))
+    }).then((issues: OriginalIssueType[]) => {
+      this.setState({
+        issues: buildIssueValues(issues),
+      })
+    })
   }
+
+  renderGrid = () => {
+    const columns = [
+      { key: "issueKey", name: "ID", editable: false, sortable: true, sortDescendingFirst: false, formatter: IssueKeyFormatter },
+      { key: "title", name: "Title", editable: true, sortable: true },
+      { key: "complete", name: "Complete", editable: true }
+    ];
+
+    const rows = buildDataGridRows(this.state.issues.sort(issueSorter));
+    return <ReactDataGrid
+      sortColumn={"issueKey"}
+      enableCellSelect={true}
+      columns={columns}
+      rowsCount={rows.length}
+      onGridSort={(sortColumn, sortDirection) => console.log(sortColumn, sortDirection)}
+      rowGetter={(i: number) => rows[i] }/>;
+  };
 }
+
+const IssueKeyFormatter = ({value}: {value: string}) => {
+  return <a href={"https://vegetalia.backlog.jp/view/" + value} target={"_blank"}>{value}</a>;
+};
