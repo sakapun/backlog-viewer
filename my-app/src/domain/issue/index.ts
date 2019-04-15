@@ -68,10 +68,13 @@ export const issueSorter = (a: Issue, b: Issue): number => {
     return b.priorityScore ? b.priorityScore : -1;
   }
 
-  if (a.power === null) {
-    return 1;
+  if (a.priorityScore === null) {
+    if (b.priorityScore !== null) {
+      return 1;
+    }
+    return a.hoursRatio - b.hoursRatio;
   }
-  return a.id - b.id;
+  return 1;
 };
 
 export const buildDataGridRows = (issues: Issue[]): Row[] => {
