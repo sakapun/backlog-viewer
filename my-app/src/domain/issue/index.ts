@@ -41,7 +41,7 @@ export const buildIssueValues = (issues: OriginalIssueType[]): Issue[] => {
       power: null,
       hoursRatio,
       priorityValue,
-      priorityScore: 0 // ダミー値
+      priorityScore: 0 // powerを使って再計算するのでダミー値
     });
 
     const priorityScore = extraFields.power ? extraFields.power * priorityValue - hoursRatio : 0;
@@ -55,8 +55,7 @@ export const buildIssueValues = (issues: OriginalIssueType[]): Issue[] => {
 
 export const issueHoursRatio = (issues: Issue[] | OriginalIssueType[]): number => {
   const max = _.maxBy(issues, "estimatedHours");
-  const ratio = !!max && max.estimatedHours ? max.estimatedHours / 5 : 1;
-  return ratio;
+  return !!max && max.estimatedHours ? max.estimatedHours / 5 : 1;
 };
 
 export const issueSorter = (a: Issue, b: Issue): number => {

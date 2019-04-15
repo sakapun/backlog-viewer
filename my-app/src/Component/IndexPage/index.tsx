@@ -56,19 +56,20 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
 
   renderGrid = () => {
     const columns = [
-      { key: "issueKey", name: "ID", editable: false, sortable: true, sortDescendingFirst: false, formatter: IssueKeyFormatter },
+      { key: "issueKey", name: "ID", editable: false, sortable: true, width: 110, sortDescendingFirst: false, formatter: IssueKeyFormatter },
       { key: "title", name: "Title", editable: false, sortable: true },
-      { key: "priorityScore", name: "優先度スコア", editable: false, formatter: NumberFormatter },
-      { key: "power", name: "効果", editable: false, formatter: NumberFormatter },
-      { key: "priorityValue", name: "優先度３段階", editable: false, formatter: NumberFormatter },
-      { key: "estimatedHours", name: "見積時間", editable: false, formatter: NumberFormatter },
-      { key: "hoursRatio", name: "コスト比率", editable: false, formatter: NumberFormatter },
+      { key: "priorityScore", name: "優先度スコア", editable: false, width: 110, formatter: NumberFormatter },
+      { key: "power", name: "効果", editable: false, width: 110, formatter: NumberFormatter },
+      { key: "priorityValue", name: "優先度３段階", editable: false, width: 110, formatter: NumberFormatter },
+      { key: "estimatedHours", name: "見積時間", editable: false, width: 110, formatter: NumberFormatter },
+      { key: "hoursRatio", name: "コスト比率", editable: false, width: 110, formatter: NumberFormatter },
 
     ];
 
     const rows = buildDataGridRows(this.state.issues.sort(issueSorter));
     return <ReactDataGrid
       sortColumn={"issueKey"}
+      minHeight={900}
       enableCellSelect={true}
       columns={columns}
       rowsCount={rows.length}
