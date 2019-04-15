@@ -11,38 +11,61 @@ export type OriginalIssueType = {
   summary: string;
   issueKey: string;
   estimatedHours: null | number;
+  priority: {
+    id: number,
+    name: string,
+  }
 }
 
 export type ExtraField = {
-  power: number | null
+  power: number | null;
+  hoursRatio: number;
+  priorityValue: number;
+  priorityScore: number;
 }
 export type Issue = OriginalIssueType & ExtraField
 
 
 export const buildIssueValues = (issues: OriginalIssueType[]): Issue[] => {
+  const useRatio = issueHoursRatio(issues);
   return issues.map((issue) => {
+    const hoursRatio = issue.estimatedHours ? issue.estimatedHours /useRatio : 0;
+    const priorityValue = 5 - issue.priority.id;
+
     const extraFields = issue.customFields.reduce((tmp: ExtraField, customField: CustomField) => {
       if (customField.name === "効果" && customField.value > 0) {
         tmp.power = customField.value;
       }
       return tmp;
     }, {
-      power: null
+      power: null,
+      hoursRatio,
+      priorityValue,
+      priorityScore: 0 // ダミー値
     });
+
+    const priorityScore = extraFields.power ? extraFields.power * priorityValue - hoursRatio : 0;
     return {
       ...issue,
       ...extraFields,
+      priorityScore,
     };
   })
 };
 
-export const issueHoursRatio = (issues: Issue[]): number => {
+export const issueHoursRatio = (issues: Issue[] | OriginalIssueType[]): number => {
   const max = _.maxBy(issues, "estimatedHours");
   const ratio = !!max && max.estimatedHours ? max.estimatedHours / 5 : 1;
   return ratio;
 };
 
 export const issueSorter = (a: Issue, b: Issue): number => {
+  if (a.priorityScore && b.priorityScore) {
+    return a.priorityScore - b.priorityScore;
+  } else if (a.priorityScore && !b.priorityScore) {
+    return -1;
+  }
+
   if (a.power === null) {
     return 1;
   }
@@ -56,7 +79,10 @@ export const buildDataGridRows = (issues: Issue[]): Row[] => {
       title: issue.summary,
       issueKey: issue.issueKey,
       power: issue.power,
-      hoursRatio: issue.estimatedHours ? _.round(issue.estimatedHours / issueHoursRatio(issues), 1) : 0
+      hoursRatio: _.round(issue.hoursRatio, 1),
+      estimatedHours: issue.estimatedHours || 0,
+      priorityValue: issue.priorityValue,
+      priorityScore: issue.priorityScore,
     }
   });
 };

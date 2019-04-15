@@ -5,4 +5,6 @@ export type Row = {
   issueKey: React.ReactNode,
   title: string,
   power: null | number;
+  estimatedHours: number;
+  priorityValue: number;
 }

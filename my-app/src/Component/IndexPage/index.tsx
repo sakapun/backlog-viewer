@@ -10,6 +10,7 @@ import {
   issueSorter,
   OriginalIssueType
 } from "../../domain/issue";
+import {NumberFormatter} from "../NumberFormatter";
 
 type IndexStateTypes = {
   projects: object[];
@@ -47,7 +48,6 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
       statusId: [1, 2],
       keyword: ""
     }).then((issues: OriginalIssueType[]) => {
-      issueHoursRatio(this.state.issues)
       this.setState({
         issues: buildIssueValues(issues),
       })
@@ -58,8 +58,11 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     const columns = [
       { key: "issueKey", name: "ID", editable: false, sortable: true, sortDescendingFirst: false, formatter: IssueKeyFormatter },
       { key: "title", name: "Title", editable: false, sortable: true },
-      { key: "power", name: "効果", editable: false },
-      { key: "hoursRatio", name: "コスト比率", editable: false },
+      { key: "priorityScore", name: "優先度スコア", editable: false, formatter: NumberFormatter },
+      { key: "power", name: "効果", editable: false, formatter: NumberFormatter },
+      { key: "priorityValue", name: "優先度３段階", editable: false, formatter: NumberFormatter },
+      { key: "estimatedHours", name: "見積時間", editable: false, formatter: NumberFormatter },
+      { key: "hoursRatio", name: "コスト比率", editable: false, formatter: NumberFormatter },
 
     ];
 
