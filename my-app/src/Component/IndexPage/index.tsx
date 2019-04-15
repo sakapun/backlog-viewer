@@ -2,7 +2,14 @@ import React from "react";
 import {backlogApi} from "../../lib/backlog-settings";
 import Select from "react-select";
 import ReactDataGrid from "react-data-grid";
-import {buildDataGridRows, buildIssueValues, Issue, issueSorter, OriginalIssueType} from "../../domain/issue";
+import {
+  buildDataGridRows,
+  buildIssueValues,
+  Issue,
+  issueHoursRatio,
+  issueSorter,
+  OriginalIssueType
+} from "../../domain/issue";
 
 type IndexStateTypes = {
   projects: object[];
@@ -40,6 +47,7 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
       statusId: [1, 2],
       keyword: ""
     }).then((issues: OriginalIssueType[]) => {
+      issueHoursRatio(this.state.issues)
       this.setState({
         issues: buildIssueValues(issues),
       })
@@ -49,8 +57,10 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
   renderGrid = () => {
     const columns = [
       { key: "issueKey", name: "ID", editable: false, sortable: true, sortDescendingFirst: false, formatter: IssueKeyFormatter },
-      { key: "title", name: "Title", editable: true, sortable: true },
-      { key: "complete", name: "Complete", editable: true }
+      { key: "title", name: "Title", editable: false, sortable: true },
+      { key: "power", name: "効果", editable: false },
+      { key: "hoursRatio", name: "コスト比率", editable: false },
+
     ];
 
     const rows = buildDataGridRows(this.state.issues.sort(issueSorter));
