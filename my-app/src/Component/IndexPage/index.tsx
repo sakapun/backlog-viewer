@@ -6,7 +6,6 @@ import {
   buildDataGridRows,
   buildIssueValues,
   Issue,
-  issueHoursRatio,
   issueSorter,
   OriginalIssueType
 } from "../../domain/issue";
