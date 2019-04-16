@@ -10,15 +10,16 @@ import {
   sortIssue
 } from "../../domain/issue";
 import {NumberFormatter} from "../NumberFormatter";
+import {buildSelectProps, Project} from "../../domain/project";
 
 type IndexStateTypes = {
-  projects: object[];
+  projects: Project[];
   issues: Issue[];
 }
 
 export class IndexPage extends React.Component<any, IndexStateTypes, any> {
   constructor(props: any) {
-    super(props)
+    super(props);
     this.state = {
       projects: [],
       issues: [],
@@ -26,13 +27,9 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
   }
 
   render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
-    const optionsForProjects = this.state.projects.map((p: any) => ({
-      value: p.id,
-      label: p.name
-    }));
     return (
       <div>
-        <Select options={optionsForProjects} onChange={this.handleChangeProject} />
+        <Select options={buildSelectProps(this.state.projects)} onChange={this.handleChangeProject} />
         {this.renderGrid()}
       </div>
     );
