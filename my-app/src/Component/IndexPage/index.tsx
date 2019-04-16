@@ -6,8 +6,8 @@ import {
   buildDataGridRows,
   buildIssueValues,
   Issue,
-  issueSorter,
-  OriginalIssueType
+  OriginalIssueType,
+  sortIssue
 } from "../../domain/issue";
 import {NumberFormatter} from "../NumberFormatter";
 
@@ -66,7 +66,7 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
 
     ];
 
-    const rows = buildDataGridRows(this.state.issues.sort(issueSorter));
+    const rows = buildDataGridRows(sortIssue(this.state.issues));
     return <ReactDataGrid
       sortColumn={"issueKey"}
       minHeight={900}

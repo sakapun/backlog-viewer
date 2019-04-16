@@ -57,24 +57,16 @@ export const issueHoursRatio = (issues: Issue[] | OriginalIssueType[]): number =
   return !!max && max.estimatedHours ? max.estimatedHours / 5 : 1;
 };
 
-export const issueSorter = (a: Issue, b: Issue): number => {
-  if (a.priorityScore !== null && b.priorityScore !== null) {
-    return b.priorityScore - a.priorityScore;
-  }
-  if (a.priorityScore !== null && b.priorityScore === null) {
-    return -1;
-  }
-  if (a.priorityScore === 0) {
-    return b.priorityScore ? b.priorityScore : -1;
-  }
+const issuePriorityNullCheck = (issue: Issue) => {
+  return issue.priorityScore === null;
+};
 
-  if (a.priorityScore === null) {
-    if (b.priorityScore !== null) {
-      return 1;
-    }
-    return a.hoursRatio - b.hoursRatio;
-  }
-  return 1;
+export const sortIssue = (issues: Issue[]): Issue[] => {
+  return _.orderBy(
+    issues,
+    [issuePriorityNullCheck, "priorityScore", "priorityValue", "hoursRatio"],
+    ["asc", "desc", "desc", "asc"],
+  );
 };
 
 export const buildDataGridRows = (issues: Issue[]): Row[] => {
