@@ -12,11 +12,14 @@ import {
 import {NumberFormatter} from "../NumberFormatter";
 import {buildSelectProps, Project} from "../../domain/project";
 import {Button} from "../Button";
+import {CustomeFieldResponse, CustomFieldOriginalResponse} from "../../domain/CustomField";
 
 type IndexStateTypes = {
   projects: Project[];
   issues: Issue[];
-  selectedProjectId?: number;
+  selectedProjectId: null | number;
+  isFiltered: boolean,
+  projectHasCustomFields: number[]
 }
 
 export class IndexPage extends React.Component<any, IndexStateTypes, any> {
@@ -25,14 +28,19 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     this.state = {
       projects: [],
       issues: [],
+      selectedProjectId: null,
+      isFiltered: false,
+      projectHasCustomFields: [],
     };
   }
 
   render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
+    const projects = this.state.isFiltered ? this.state.projects.filter(p => this.state.projectHasCustomFields.includes(p.id)) : this.state.projects ;
     return (
       <div>
-        <Select options={buildSelectProps(this.state.projects)} onChange={this.handleChangeProject} />
-        <Button onClick={() => this.loadIssues(this.state.selectedProjectId as number)} >再読込</Button>
+        <Select options={buildSelectProps(projects)} onChange={this.handleChangeProject} />
+        <Button onClick={this.onClickReload} >再読込</Button>
+        <Button onClick={this.onToggleFilter} >効果があるやつだけ</Button>
         {this.renderGrid()}
       </div>
     );
@@ -42,8 +50,8 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
   }
 
   handleChangeProject = (event: any) => {
-    this.setState({selectedProjectId: event.value as number});
-    this.loadIssues(event.value as number);
+    this.setState({selectedProjectId: event.value});
+    this.loadIssues(event.value);
   }
 
   renderGrid = () => {
@@ -80,6 +88,29 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
         issues: buildIssueValues(issues),
       })
     })
+  }
+
+  onClickReload = () => {
+    this.state.selectedProjectId !== null && this.loadIssues(this.state.selectedProjectId);
+  }
+
+  onToggleFilter = async () => {
+    if (!this.state.isFiltered) {
+      const customFields: CustomeFieldResponse[][] = await Promise.all(this.state.projects.map( (project) => {
+        return backlogApi.getCustomFields("" + project.id)
+          .then((res: CustomFieldOriginalResponse[]) => {
+            return res.map(r => {
+              return {
+                ...r,
+                projectId: project.id
+              }
+            })
+          });
+      }))
+      const cfids = customFields.flat(1).filter((item) => item.name === "効果").map((item) => item.projectId);
+      this.setState({projectHasCustomFields: cfids});
+    }
+    this.setState({isFiltered: !this.state.isFiltered});
   }
 }
 
