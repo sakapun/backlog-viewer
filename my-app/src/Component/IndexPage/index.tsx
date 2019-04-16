@@ -11,10 +11,12 @@ import {
 } from "../../domain/issue";
 import {NumberFormatter} from "../NumberFormatter";
 import {buildSelectProps, Project} from "../../domain/project";
+import {Button} from "../Button";
 
 type IndexStateTypes = {
   projects: Project[];
   issues: Issue[];
+  selectedProjectId?: number;
 }
 
 export class IndexPage extends React.Component<any, IndexStateTypes, any> {
@@ -30,6 +32,7 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     return (
       <div>
         <Select options={buildSelectProps(this.state.projects)} onChange={this.handleChangeProject} />
+        <Button onClick={() => this.loadIssues(this.state.selectedProjectId as number)} >再読込</Button>
         {this.renderGrid()}
       </div>
     );
@@ -39,16 +42,8 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
   }
 
   handleChangeProject = (event: any) => {
-    backlogApi.getIssues({
-      projectId: [event.value],
-      statusId: [1, 2],
-      keyword: "",
-      count: 100,
-    }).then((issues: OriginalIssueType[]) => {
-      this.setState({
-        issues: buildIssueValues(issues),
-      })
-    })
+    this.setState({selectedProjectId: event.value as number});
+    this.loadIssues(event.value as number);
   }
 
   renderGrid = () => {
@@ -73,6 +68,19 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
       onGridSort={(sortColumn, sortDirection) => console.log(sortColumn, sortDirection)}
       rowGetter={(i: number) => rows[i] }/>;
   };
+
+  loadIssues = (id: number) => {
+    backlogApi.getIssues({
+      projectId: [id],
+      statusId: [1, 2],
+      keyword: "",
+      count: 100,
+    }).then((issues: OriginalIssueType[]) => {
+      this.setState({
+        issues: buildIssueValues(issues),
+      })
+    })
+  }
 }
 
 const IssueKeyFormatter = ({value}: {value: string}) => {
