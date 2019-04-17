@@ -1,0 +1,27 @@
+{
+  "rulesDirectory": [
+    "tslint-react/rules",
+    "tslint-plugin-prettier"
+  ],
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "interface-over-type-literal": false,
+    "interface-name": [true, "never-prefix"],
+    "object-literal-sort-keys": false,
+    "eofline": true,
+    "member-access": false,
+    "no-console": false,
+    "prettier": [true],
+    "max-classes-per-file": false,
+    "no-shadowed-variable": false,
+    "jsx-key": true
+  },
+  "linterOptions": {
+    "exclude": [
+      "src/libs/apiClient/*"
+    ]
+  }
+}
