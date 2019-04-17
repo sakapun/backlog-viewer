@@ -50,7 +50,7 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
   }
   async componentDidMount() {
     const projects = await backlogApi.getProjects();
-    this.setState({projects})
+    this.setState({ projects });
 
     // カスタムフィールドで効果という項目があるののみ絞り込む
     const customFields: CustomeFieldResponse[][] = await Promise.all(
