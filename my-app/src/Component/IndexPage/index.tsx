@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDataGrid from "react-data-grid";
 import Select from "react-select";
+import AutoSizer from "react-virtualized-auto-sizer";
 import { CustomeFieldResponse, CustomFieldOriginalResponse } from "../../domain/CustomField";
 import { buildDataGridRows, buildIssueValues, Issue, OriginalIssueType, sortIssue } from "../../domain/issue";
 import { buildSelectProps, Project } from "../../domain/project";
 import { backlogApi } from "../../lib/backlog-settings";
 import { Button } from "../Button";
 import { NumberFormatter } from "../NumberFormatter";
+import { AppOuter, ContentOuter, ControlArea, TableArea } from "./element";
 
 type IndexStateTypes = {
   projects: Project[];
@@ -40,12 +42,18 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     | undefined {
     const projects = this.state.projects.filter((p) => this.state.projectHasCustomFields.includes(p.id));
     return (
-      <div>
-        <Select options={buildSelectProps(projects)} onChange={this.handleChangeProject} />
-        <Button onClick={this.onClickReload}>再読込</Button>
-        <Button onClick={this.onToggleFilter}>効果があるやつだけ</Button>
-        {this.renderGrid()}
-      </div>
+      <AppOuter>
+        <ContentOuter>
+          <ControlArea>
+            プロジェクトを選択してください
+            <Select options={buildSelectProps(projects)} onChange={this.handleChangeProject} />
+          </ControlArea>
+          <TableArea>
+            <AutoSizer>{({ width, height }) => this.renderGrid(width, height)}</AutoSizer>
+          </TableArea>
+          <Button onClick={this.onClickReload}>再読込</Button>
+        </ContentOuter>
+      </AppOuter>
     );
   }
   async componentDidMount() {
@@ -77,7 +85,7 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     this.loadIssues(event.value);
   };
 
-  renderGrid = () => {
+  renderGrid = (width: number, height: number) => {
     const columns = [
       {
         key: "issueKey",
@@ -100,7 +108,8 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     return (
       <ReactDataGrid
         sortColumn={"issueKey"}
-        minHeight={900}
+        minWidth={width - 2}
+        minHeight={height}
         enableCellSelect={true}
         columns={columns}
         rowsCount={rows.length}
