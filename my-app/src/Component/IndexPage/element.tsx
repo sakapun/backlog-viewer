@@ -1,7 +1,5 @@
 import styled from "@emotion/styled";
 
-const CONTROL_AREA_HEIGHT = "80px";
-
 export const AppOuter = styled.div`
   height: 100vh;
   width: 100vw;
@@ -10,16 +8,23 @@ export const AppOuter = styled.div`
 
 export const ContentOuter = styled.div`
   width: 90vw;
-  height: 100%;
   min-width: 1080px;
+  height: 100%;
   margin: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const ControlArea = styled.div`
-  height: ${CONTROL_AREA_HEIGHT};
+  flex-grow: 0;
+  margin-bottom: 30px;
 `;
 
 export const TableArea = styled.div`
-  height: calc(100% - ${CONTROL_AREA_HEIGHT} - 50px);
-  margin-bottom: 15px;
+  flex-grow: 1;
+`;
+
+export const FooterArea = styled.div`
+  margin-top: 30px;
+  flex-grow: 0;
 `;

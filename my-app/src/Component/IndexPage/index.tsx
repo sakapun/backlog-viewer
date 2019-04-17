@@ -8,7 +8,7 @@ import { buildSelectProps, Project } from "../../domain/project";
 import { backlogApi } from "../../lib/backlog-settings";
 import { Button } from "../Button";
 import { NumberFormatter } from "../NumberFormatter";
-import { AppOuter, ContentOuter, ControlArea, TableArea } from "./element";
+import { AppOuter, ContentOuter, ControlArea, FooterArea, TableArea } from "./element";
 
 type IndexStateTypes = {
   projects: Project[];
@@ -51,7 +51,9 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
           <TableArea>
             <AutoSizer>{({ width, height }) => this.renderGrid(width, height)}</AutoSizer>
           </TableArea>
-          <Button onClick={this.onClickReload}>再読込</Button>
+          <FooterArea>
+            <Button onClick={this.onClickReload}>再読込</Button>
+          </FooterArea>
         </ContentOuter>
       </AppOuter>
     );
