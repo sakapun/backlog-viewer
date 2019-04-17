@@ -38,9 +38,7 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     | boolean
     | null
     | undefined {
-    const projects = this.state.isFiltered
-      ? this.state.projects.filter((p) => this.state.projectHasCustomFields.includes(p.id))
-      : this.state.projects;
+    const projects = this.state.projects.filter((p) => this.state.projectHasCustomFields.includes(p.id));
     return (
       <div>
         <Select options={buildSelectProps(projects)} onChange={this.handleChangeProject} />
@@ -50,8 +48,28 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
       </div>
     );
   }
-  componentDidMount(): void {
-    backlogApi.getProjects().then((r) => this.setState({ projects: r }));
+  async componentDidMount() {
+    const projects = await backlogApi.getProjects();
+    this.setState({projects})
+
+    // カスタムフィールドで効果という項目があるののみ絞り込む
+    const customFields: CustomeFieldResponse[][] = await Promise.all(
+      this.state.projects.map((project) => {
+        return backlogApi.getCustomFields("" + project.id).then((res: CustomFieldOriginalResponse[]) => {
+          return res.map((r) => {
+            return {
+              ...r,
+              projectId: project.id,
+            };
+          });
+        });
+      }),
+    );
+    const cfids = customFields
+      .flat(1)
+      .filter((item) => item.name === "効果")
+      .map((item) => item.projectId);
+    this.setState({ projectHasCustomFields: cfids });
   }
 
   handleChangeProject = (event: any) => {
@@ -114,25 +132,6 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
   };
 
   onToggleFilter = async () => {
-    if (!this.state.isFiltered) {
-      const customFields: CustomeFieldResponse[][] = await Promise.all(
-        this.state.projects.map((project) => {
-          return backlogApi.getCustomFields("" + project.id).then((res: CustomFieldOriginalResponse[]) => {
-            return res.map((r) => {
-              return {
-                ...r,
-                projectId: project.id,
-              };
-            });
-          });
-        }),
-      );
-      const cfids = customFields
-        .flat(1)
-        .filter((item) => item.name === "効果")
-        .map((item) => item.projectId);
-      this.setState({ projectHasCustomFields: cfids });
-    }
     this.setState({ isFiltered: !this.state.isFiltered });
   };
 }
