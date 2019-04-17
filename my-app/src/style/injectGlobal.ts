@@ -4,19 +4,32 @@ import { css } from "@emotion/core";
 const IE_MARGIN_MIN: number = 8;
 // tslint:disable-next-line:no-unused-expression
 export const globalCss = css`
-  html, body, #root {
+  html,
+  body,
+  #root {
     height: 100%;
     margin: 0;
   }
 
   body {
     box-sizing: border-box;
-    font-family: -apple-system,Arial,'Helvetica Neue',Helvetica,'Hiragino Maru Gothic W4 JIS2004','ヒラギノ角ゴ ProN W3','Hiragino Kaku Gothic ProN','メイリオ',Meiryo,sans-serif;
+    font-family: -apple-system, Arial, "Helvetica Neue", Helvetica, "Hiragino Maru Gothic W4 JIS2004", "ヒラギノ角ゴ ProN W3",
+      "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
     margin: ${DIMENS.X0};
     padding: ${DIMENS.X0};
   }
 
-  div, p, ul, ol, li, dl, dt, dd, h1, h2, h3 {
+  div,
+  p,
+  ul,
+  ol,
+  li,
+  dl,
+  dt,
+  dd,
+  h1,
+  h2,
+  h3 {
     box-sizing: border-box;
     margin: ${DIMENS.X0};
     padding: ${DIMENS.X0};
@@ -41,13 +54,11 @@ export const globalCss = css`
     margin: ${DIMENS.X0};
   }
 
-
   /* ポップアップの色を変更できるようにするため, currentColorを指定する。色を変更する時は親要素のcolorを指定して色を変更する */
   /* https://github.com/littlebits/react-popover#examples */
   .Popover-tip {
     fill: currentColor;
   }
-
 
   /* paper.css */
   /* https://github.com/cognitom/paper-css */
@@ -67,34 +78,71 @@ export const globalCss = css`
     box-sizing: border-box;
     page-break-after: always;
   }
-  
-  
+
   /** Paper sizes **/
-  #print.A3               .sheet { width: ${297 - IE_MARGIN_MIN}mm; height: ${419 - IE_MARGIN_MIN}mm }
-  #print.A3.landscape     .sheet { width: 420mm; height: 296mm }
-  #print.A4               .sheet { width: 210mm; height: 296mm }
-  #print.A4.landscape     .sheet { width: 297mm; height: 209mm }
-  #print.A5               .sheet { width: 148mm; height: 209mm }
-  #print.A5.landscape     .sheet { width: 210mm; height: 147mm }
-  #print.letter           .sheet { width: 216mm; height: 279mm }
-  #print.letter.landscape .sheet { width: 280mm; height: 215mm }
-  #print.legal            .sheet { width: 216mm; height: 356mm }
-  #print.legal.landscape  .sheet { width: 357mm; height: 215mm }
-  
+  #print.A3 .sheet {
+    width: ${297 - IE_MARGIN_MIN}mm;
+    height: ${419 - IE_MARGIN_MIN}mm;
+  }
+  #print.A3.landscape .sheet {
+    width: 420mm;
+    height: 296mm;
+  }
+  #print.A4 .sheet {
+    width: 210mm;
+    height: 296mm;
+  }
+  #print.A4.landscape .sheet {
+    width: 297mm;
+    height: 209mm;
+  }
+  #print.A5 .sheet {
+    width: 148mm;
+    height: 209mm;
+  }
+  #print.A5.landscape .sheet {
+    width: 210mm;
+    height: 147mm;
+  }
+  #print.letter .sheet {
+    width: 216mm;
+    height: 279mm;
+  }
+  #print.letter.landscape .sheet {
+    width: 280mm;
+    height: 215mm;
+  }
+  #print.legal .sheet {
+    width: 216mm;
+    height: 356mm;
+  }
+  #print.legal.landscape .sheet {
+    width: 357mm;
+    height: 215mm;
+  }
+
   /** Padding area **/
-  .sheet.padding-10mm { padding: 10mm }
-  .sheet.padding-15mm { padding: 15mm }
-  .sheet.padding-20mm { padding: 20mm }
-  .sheet.padding-25mm { padding: 25mm }
-  
+  .sheet.padding-10mm {
+    padding: 10mm;
+  }
+  .sheet.padding-15mm {
+    padding: 15mm;
+  }
+  .sheet.padding-20mm {
+    padding: 20mm;
+  }
+  .sheet.padding-25mm {
+    padding: 25mm;
+  }
+
   /** For screen preview **/
   @media screen {
     body {
-      background: #E0E0E0;
+      background: #e0e0e0;
       height: 100%;
     }
     .sheet {
-      background: #FFFFFF;
+      background: #ffffff;
       margin: 0 auto;
       padding: 5mm 0;
     }
@@ -102,15 +150,32 @@ export const globalCss = css`
       margin-bottom: ${DIMENS.X18};
     }
   }
-  
+
   /** Fix for Chrome issue #273306 **/
   @media print {
-    #print.A3.landscape            { width: 420mm }
-    #print.A3, #print.A4.landscape { width: ${297 - IE_MARGIN_MIN}mm }
-    #print.A4, #print.A5.landscape { width: 210mm }
-    #print.A5                      { width: 148mm }
-    #print.letter, #print.legal    { width: 216mm }
-    #print.letter.landscape        { width: 280mm }
-    #print.legal.landscape         { width: 357mm }
+    #print.A3.landscape {
+      width: 420mm;
+    }
+    #print.A3,
+    #print.A4.landscape {
+      width: ${297 - IE_MARGIN_MIN}mm;
+    }
+    #print.A4,
+    #print.A5.landscape {
+      width: 210mm;
+    }
+    #print.A5 {
+      width: 148mm;
+    }
+    #print.letter,
+    #print.legal {
+      width: 216mm;
+    }
+    #print.letter.landscape {
+      width: 280mm;
+    }
+    #print.legal.landscape {
+      width: 357mm;
+    }
   }
 `;

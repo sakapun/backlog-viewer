@@ -1,7 +1,7 @@
-import 'isomorphic-form-data';
-import 'isomorphic-fetch';
-import * as es6promise from 'es6-promise';
-import * as backlogjs from 'backlog-js';
+import * as backlogjs from "backlog-js";
+import * as es6promise from "es6-promise";
+import "isomorphic-fetch";
+import "isomorphic-form-data";
 
 es6promise.polyfill();
 
@@ -10,4 +10,4 @@ const host = process.env.REACT_APP_HOST_URL || "";
 const apiKey = process.env.REACT_APP_API_KEY || "";
 
 // Use API Key
-export const backlogApi = new backlogjs.Backlog({host, apiKey});
+export const backlogApi = new backlogjs.Backlog({ host, apiKey });

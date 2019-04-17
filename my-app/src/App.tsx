@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
-import './App.css';
-import {IndexPage} from "./Component/IndexPage";
+import React, { Component } from "react";
+import "./App.css";
+import { IndexPage } from "./Component/IndexPage";
 
 class App extends Component {
   render() {
-    return (
-      <IndexPage />
-    );
+    return <IndexPage />;
   }
 }
 
