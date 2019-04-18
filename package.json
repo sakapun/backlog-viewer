@@ -1,7 +1,8 @@
 {
-  "name": "my-app",
+  "name": "backlog_viewer_app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@emotion/core": "^10.0.10",
     "@emotion/styled": "^10.0.10",
