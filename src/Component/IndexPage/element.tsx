@@ -4,27 +4,37 @@ export const AppOuter = styled.div`
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-`;
-
-export const ContentOuter = styled.div`
-  width: 90vw;
-  min-width: 1080px;
-  height: 100%;
-  margin: auto;
   display: flex;
   flex-direction: column;
 `;
 
-export const ControlArea = styled.div`
-  flex-grow: 0;
-  margin-bottom: 30px;
+export const HeaderOuter = styled.div`
+  height: 40px;
+  overflow: hidden;
+  background: pink;
 `;
 
-export const TableArea = styled.div`
+export const MainOuter = styled.div`
+  display: flex;
+  overflow: hidden;
   flex-grow: 1;
 `;
 
-export const FooterArea = styled.div`
-  margin-top: 30px;
-  flex-grow: 0;
+export const SidebarOuter = styled.div`
+  width: 300px;
+  overflow: hidden;
 `;
+
+export const SidebarContent = styled.div`
+  padding: 15px;
+  height: 100%;
+`;
+
+export const ContentOuter = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 30px;
+`;
+
+export const ControlArea = styled.div``;

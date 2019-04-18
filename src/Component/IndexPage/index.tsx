@@ -8,7 +8,7 @@ import { buildSelectProps, Project } from "../../domain/project";
 import { backlogApi } from "../../lib/backlog-settings";
 import { Button } from "../Button";
 import { NumberFormatter } from "../NumberFormatter";
-import { AppOuter, ContentOuter, ControlArea, FooterArea, TableArea } from "./element";
+import { AppOuter, ContentOuter, ControlArea, HeaderOuter, MainOuter, SidebarContent, SidebarOuter } from "./element";
 
 type IndexStateTypes = {
   projects: Project[];
@@ -43,18 +43,21 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     const projects = this.state.projects.filter((p) => this.state.projectHasCustomFields.includes(p.id));
     return (
       <AppOuter>
-        <ContentOuter>
-          <ControlArea>
-            プロジェクトを選択してください
-            <Select options={buildSelectProps(projects)} onChange={this.handleChangeProject} />
-          </ControlArea>
-          <TableArea>
+        <HeaderOuter>header</HeaderOuter>
+        <MainOuter>
+          <SidebarOuter>
+            <SidebarContent>
+              <ControlArea>
+                プロジェクトを選択してください
+                <Select options={buildSelectProps(projects)} onChange={this.handleChangeProject} />
+                <Button onClick={this.onClickReload}>再読込</Button>
+              </ControlArea>
+            </SidebarContent>
+          </SidebarOuter>
+          <ContentOuter>
             <AutoSizer>{({ width, height }) => this.renderGrid(width, height)}</AutoSizer>
-          </TableArea>
-          <FooterArea>
-            <Button onClick={this.onClickReload}>再読込</Button>
-          </FooterArea>
-        </ContentOuter>
+          </ContentOuter>
+        </MainOuter>
       </AppOuter>
     );
   }
