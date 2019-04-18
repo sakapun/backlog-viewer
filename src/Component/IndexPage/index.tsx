@@ -43,7 +43,7 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     const projects = this.state.projects.filter((p) => this.state.projectHasCustomFields.includes(p.id));
     return (
       <AppOuter>
-        <HeaderOuter>header</HeaderOuter>
+        <HeaderOuter>バックログビューアー</HeaderOuter>
         <MainOuter>
           <SidebarOuter>
             <SidebarContent>
