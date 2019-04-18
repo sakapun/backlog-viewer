@@ -50,7 +50,10 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
               <ControlArea>
                 プロジェクトを選択してください
                 <Select options={buildSelectProps(projects)} onChange={this.handleChangeProject} />
-                <Button onClick={this.onClickReload}>再読込</Button>
+              </ControlArea>
+              <ControlArea>
+                <div>データの更新</div>
+                <Button onClick={this.onClickReload}>更新</Button>
               </ControlArea>
             </SidebarContent>
           </SidebarOuter>

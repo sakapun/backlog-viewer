@@ -37,4 +37,6 @@ export const ContentOuter = styled.div`
   padding: 30px;
 `;
 
-export const ControlArea = styled.div``;
+export const ControlArea = styled.div`
+  margin-bottom: 50px;
+`;
