@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 
+export const HEADER_HEIGHT = "40px";
 export const AppOuter = styled.div`
   height: 100vh;
   width: 100vw;
@@ -13,9 +14,8 @@ export const AppOuter = styled.div`
 `;
 
 export const HeaderOuter = styled.div`
-  height: 40px;
+  height: ${HEADER_HEIGHT};
   overflow: hidden;
-  background: pink;
 `;
 
 export const MainOuter = styled.div`
@@ -38,7 +38,7 @@ export const ContentOuter = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding: 30px;
+  padding: 30px 15px;
 `;
 
 export const ControlArea = styled.div`

@@ -9,6 +9,7 @@ import { backlogApi } from "../../lib/backlog-settings";
 import { Button } from "../Button";
 import { NumberFormatter } from "../NumberFormatter";
 import { AppOuter, ContentOuter, ControlArea, HeaderOuter, MainOuter, SidebarContent, SidebarOuter } from "./element";
+import {Header} from "../Header";
 
 type IndexStateTypes = {
   projects: Project[];
@@ -43,7 +44,9 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     const projects = this.state.projects.filter((p) => this.state.projectHasCustomFields.includes(p.id));
     return (
       <AppOuter>
-        <HeaderOuter>バックログビューアー</HeaderOuter>
+        <HeaderOuter>
+          <Header />
+        </HeaderOuter>
         <MainOuter>
           <SidebarOuter>
             <SidebarContent>
