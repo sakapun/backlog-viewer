@@ -8,7 +8,7 @@ import { buildSelectProps, Project } from "../../domain/project";
 import { backlogApi } from "../../lib/backlog-settings";
 import { Button } from "../Button";
 import { Header } from "../Header";
-import { LoginPage } from "../LoginPage";
+import { LoginContainer } from "../LoginPage";
 import { NumberFormatter } from "../NumberFormatter";
 import { AppOuter, ContentOuter, ControlArea, HeaderOuter, MainOuter, SidebarContent, SidebarOuter } from "./element";
 
@@ -60,7 +60,7 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
                 <Button onClick={this.onClickReload}>更新</Button>
               </ControlArea>
               <ControlArea>
-                <LoginPage />
+                <LoginContainer />
               </ControlArea>
             </SidebarContent>
           </SidebarOuter>
