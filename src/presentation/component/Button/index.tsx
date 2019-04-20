@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { COLOR, DIMENS, FONTSIZE } from "../../style";
+import { COLOR, DIMENS, FONTSIZE } from "../../../style";
 
 export type PropType = {
   className?: string;
