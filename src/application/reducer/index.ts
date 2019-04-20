@@ -1,6 +1,6 @@
+import { BacklogSetting, initialState as backlogSetting } from "../../domain/BacklogSetting";
 import { Issue } from "../../domain/issue";
 import { Project } from "../../domain/project";
-import { initialState as backlogSetting } from "./backlogSetting";
 
 export const defaultState = {
   ok: true,
@@ -9,14 +9,14 @@ export const defaultState = {
   customFieldIds: [] as number[],
   issues: [] as Issue[],
   selectedProjectId: 0,
+  isSettingPage: true,
 };
 
 export type State = typeof defaultState;
 
 export type Action =
-  | { type: "no" }
-  | { type: "yes" }
-  | { type: "SET_BACKLOG" }
+  | { type: "FINISH_SETTING";}
+  | { type: "SET_BACKLOG"; payload: BacklogSetting }
   | { type: "UPDATE_BACKLOG_API_KEY"; payload: string }
   | { type: "UPDATE_SELECTED_PROJECT_ID"; payload: number }
   | { type: "CONCAT_PROJECTS"; payload: Project[] }
@@ -25,34 +25,15 @@ export type Action =
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "no":
+    case "FINISH_SETTING":
       return {
         ...state,
-        ok: false,
-      };
-    case "yes":
-      return {
-        ...state,
-        ok: true,
-      };
-    case "UPDATE_BACKLOG_API_KEY":
-      return {
-        ...state,
-        backlogSetting: {
-          ...state.backlogSetting,
-          editState: {
-            ...state.backlogSetting.editState,
-            apiKey: action.payload,
-          },
-        },
+        isSettingPage: false,
       };
     case "SET_BACKLOG":
       return {
         ...state,
-        backlogSetting: {
-          ...state.backlogSetting,
-          origin: state.backlogSetting.editState,
-        },
+        backlogSetting: action.payload,
       };
     case "CONCAT_PROJECTS":
       return {

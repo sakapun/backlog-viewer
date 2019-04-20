@@ -6,20 +6,20 @@ import { LoginContainer } from "../LoginPage";
 import { AppOuter, HeaderOuter, MainOuter } from "./element";
 
 export type IndexComponentType = {
-  isApiEnable: boolean;
+  isSettingPage: boolean;
 };
-export const IndexPageComponent = ({ isApiEnable }: IndexComponentType) => {
+export const IndexPageComponent = ({ isSettingPage }: IndexComponentType) => {
   return (
     <AppOuter>
       <HeaderOuter>
         <Header />
       </HeaderOuter>
-      <MainOuter>{isApiEnable ? <MainPageContainer /> : <LoginContainer />}</MainOuter>
+      <MainOuter>{isSettingPage ? <LoginContainer /> : <MainPageContainer /> }</MainOuter>
     </AppOuter>
   );
 };
 
 export const IndexPage = () => {
-  const backlogSetting = useGlobalState("backlogSetting");
-  return <IndexPageComponent isApiEnable={!!backlogSetting.origin.apiKey} />;
+  const isSettingPage = useGlobalState("isSettingPage");
+  return <IndexPageComponent isSettingPage={isSettingPage} />;
 };
