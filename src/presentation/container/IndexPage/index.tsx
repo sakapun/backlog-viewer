@@ -14,7 +14,7 @@ export const IndexPageComponent = ({ isSettingPage }: IndexComponentType) => {
       <HeaderOuter>
         <Header />
       </HeaderOuter>
-      <MainOuter>{isSettingPage ? <LoginContainer /> : <MainPageContainer /> }</MainOuter>
+      <MainOuter>{isSettingPage ? <LoginContainer /> : <MainPageContainer />}</MainOuter>
     </AppOuter>
   );
 };

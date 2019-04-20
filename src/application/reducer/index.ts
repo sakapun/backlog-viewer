@@ -15,7 +15,7 @@ export const defaultState = {
 export type State = typeof defaultState;
 
 export type Action =
-  | { type: "FINISH_SETTING";}
+  | { type: "FINISH_SETTING" }
   | { type: "SET_BACKLOG"; payload: BacklogSetting }
   | { type: "UPDATE_BACKLOG_API_KEY"; payload: string }
   | { type: "UPDATE_SELECTED_PROJECT_ID"; payload: number }
