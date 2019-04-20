@@ -14,33 +14,63 @@ import { ContentOuter, ControlArea, SidebarContent, SidebarOuter } from "./eleme
 export type HooksType = {
   projects: Project[];
   projectHasCustomFields: number[];
+  loadIssues: (projectId: number) => void;
+  selectedProjectId: number;
 };
 
-export const Hooks = ({ projects, projectHasCustomFields }: HooksType) => {
+export const Hooks = ({ projects, projectHasCustomFields, loadIssues, selectedProjectId }: HooksType) => {
   const [a, seta] = useState<number>(1);
   const [b, setb] = useState<number>(1);
   useEffect(() => console.log(123), [a]);
   const countUp = useCallback(() => seta((prev) => prev + 1), [seta]);
   const countDown = useCallback(() => setb((prev) => prev - 1), [setb]);
+
+  /**
+   * プロジェクトを選択したときの関数
+   */
+  const changeHook = useCallback((ev: any) => {
+    const projectId = ev.value;
+    if (typeof projectId === "number") {
+      loadIssues(projectId);
+    }
+  }, []);
+
+  /**
+   * 課題再読込
+   */
+  const reloadIssues = useCallback(() => loadIssues(selectedProjectId), [selectedProjectId]);
+
   return (
     <>
       <SidebarOuter>
         <SidebarContent>
           <ControlArea>
-            <Select options={buildSelectProps(projects)} />
+            <Select options={buildSelectProps(projects)} onChange={changeHook} />
+          </ControlArea>
+          <ControlArea>
+            <div>データの更新</div>
+            <Button onClick={reloadIssues}>更新</Button>
           </ControlArea>
           <button onClick={countUp}>up: {a}</button>
           <button onClick={countDown}>up: {b}</button>
         </SidebarContent>
       </SidebarOuter>
       <ContentOuter>
-        <pre>{projectHasCustomFields.toString()}{projects.toString()}</pre>
+        <pre>
+          {projectHasCustomFields.toString()}
+          {projects.toString()}
+        </pre>
       </ContentOuter>
     </>
   );
 };
 
 export const HooksContainerz = () => {
+  // state
+  const projects = useGlobalState("projects");
+  const customFieldIds = useGlobalState("customFieldIds");
+  const selectedProjectId = useGlobalState("selectedProjectId");
+
   const dispatch = useDispatch();
   // 初期化
   useEffect(() => {
@@ -69,8 +99,22 @@ export const HooksContainerz = () => {
     })();
   }, []);
 
-  const projects = useGlobalState("projects");
-  const customFieldIds = useGlobalState("customFieldIds");
+  // action
+  const loadIssues = (projectId: number) => {
+    dispatch({ type: "UPDATE_SELECTED_PROJECT_ID", payload: projectId });
+    backlogApi
+      .getIssues({
+        projectId: [projectId],
+        statusId: [1, 2],
+        keyword: "",
+        count: 100,
+      })
+      .then((issues: OriginalIssueType[]) => {
+        dispatch({ type: "SET_ISSUES", payload: buildIssueValues(issues) });
+      });
+  };
 
-  return <Hooks projects={projects} projectHasCustomFields={customFieldIds} />;
+  return (
+    <Hooks projects={projects} projectHasCustomFields={customFieldIds} loadIssues={loadIssues} selectedProjectId={selectedProjectId} />
+  );
 };
