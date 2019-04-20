@@ -15,6 +15,7 @@ export const AppOuter = styled.div`
 
 export const HeaderOuter = styled.div`
   height: ${HEADER_HEIGHT};
+  max-height: ${HEADER_HEIGHT};
   overflow: hidden;
 `;
 
@@ -26,6 +27,7 @@ export const MainOuter = styled.div`
 
 export const SidebarOuter = styled.div`
   width: 300px;
+  min-width: 300px;
   overflow: hidden;
 `;
 

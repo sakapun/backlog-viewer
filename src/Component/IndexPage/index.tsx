@@ -11,7 +11,7 @@ import { Header } from "../Header";
 import { LoginContainer } from "../LoginPage";
 import { NumberFormatter } from "../NumberFormatter";
 import { AppOuter, ContentOuter, ControlArea, HeaderOuter, MainOuter, SidebarContent, SidebarOuter } from "./element";
-import { Hooks } from "./hook";
+import { Hooks, HooksContainerz } from "./hook";
 
 type IndexStateTypes = {
   projects: Project[];
@@ -47,11 +47,11 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     return (
       <AppOuter>
         <HeaderOuter>
-          <Header toggleMain={this.onToggleFilter}/>
+          <Header toggleMain={this.onToggleFilter} />
         </HeaderOuter>
         <MainOuter>
           {this.state.isFiltered ? (
-            <Hooks />
+            <HooksContainerz />
           ) : (
             <>
               <SidebarOuter>
