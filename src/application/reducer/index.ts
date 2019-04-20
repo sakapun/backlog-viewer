@@ -1,10 +1,10 @@
 import { Issue } from "../../domain/issue";
 import { Project } from "../../domain/project";
-import { initialState as backlogState } from "./backlog";
+import { initialState as backlogSetting } from "./backlogSetting";
 
 export const defaultState = {
   ok: true,
-  backlogState,
+  backlogSetting,
   projects: [] as Project[],
   customFieldIds: [] as number[],
   issues: [] as Issue[],
@@ -23,7 +23,7 @@ export type Action =
   | { type: "SET_CUSTOM_FIELD_IDS"; payload: number[] }
   | { type: "SET_ISSUES"; payload: Issue[] };
 
-export const reducer = (state: State, action: Action) => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "no":
       return {
@@ -38,10 +38,10 @@ export const reducer = (state: State, action: Action) => {
     case "UPDATE_BACKLOG_API_KEY":
       return {
         ...state,
-        backlogState: {
-          ...state.backlogState,
+        backlogSetting: {
+          ...state.backlogSetting,
           editState: {
-            ...state.backlogState.editState,
+            ...state.backlogSetting.editState,
             apiKey: action.payload,
           },
         },
@@ -49,9 +49,9 @@ export const reducer = (state: State, action: Action) => {
     case "SET_BACKLOG":
       return {
         ...state,
-        backlogState: {
-          ...state.backlogState,
-          origin: state.backlogState.editState,
+        backlogSetting: {
+          ...state.backlogSetting,
+          origin: state.backlogSetting.editState,
         },
       };
     case "CONCAT_PROJECTS":

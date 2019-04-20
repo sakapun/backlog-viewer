@@ -3,7 +3,7 @@ export type BacklogSetting = {
   hostUrl: string | null;
 };
 
-export type BacklogState = {
+export type BacklogSettingState = {
   editState: BacklogSetting;
   origin: BacklogSetting;
 };
@@ -13,7 +13,7 @@ export const initialBacklogState: BacklogSetting = {
   hostUrl: null,
 };
 
-export const initialState: BacklogState = {
+export const initialState: BacklogSettingState = {
   editState: initialBacklogState,
   origin: initialBacklogState,
 };
