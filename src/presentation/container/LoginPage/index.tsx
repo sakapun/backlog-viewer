@@ -1,33 +1,63 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 import { useDispatch, useGlobalState } from "../../../application";
 import { BacklogSetting, SpacePostfix } from "../../../domain/BacklogSetting";
+import { backlogCreater } from "../../../lib/backlog-settings";
 import { Button } from "../../component/Button";
 import { LoginFrame, LoginOuter, SelectWidth, SpaceNameInputArea } from "./element";
 
 export type LoginPageTypes = {
   backlogSetting: BacklogSetting;
-  handleAPIKeyChange: (v: string) => void;
   handleAPIKeySet: (backlogSetting: BacklogSetting) => void;
 };
 
-export const LoginPage = ({ backlogSetting, handleAPIKeySet, handleAPIKeyChange }: LoginPageTypes) => {
-  const updateEvent = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => handleAPIKeyChange(ev.target.value), [handleAPIKeyChange]);
+export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
   const [spaceId, updateSpaceId] = useState<string>("");
-
   const [spacePostfix, updatePostfix] = useState<SpacePostfix>(".backlog.jp");
   const [apiKey, updateApiKey] = useState<string>("");
+  const backlogSetting: BacklogSetting = {
+    spaceId,
+    spacePostfix,
+    apiKey,
+  };
+
   const [isStepOneDone, changeStepOneDone] = useState<boolean>(false);
+  const [errorStr, setErrorStr] = useState<string>("");
   const options = [{ label: ".backlog.jp", value: ".backlog.jp" }, { label: ".backlog.com", value: ".backlog.com" }];
 
+  /**
+   * DOMイベント
+   */
   const handleUpdateApiKey = useCallback((ev: any) => updateApiKey(ev.target.value), []);
+
+  /**
+   * ログインを施行し、成功だったら値を保存して課題画面へ
+   */
   const tryLogin = useCallback(() => {
-    handleAPIKeySet({
-      apiKey,
-      spaceId,
-      spacePostfix,
-    });
+    const backlogApi = backlogCreater(spaceId + spacePostfix, apiKey);
+    (async () => {
+      try {
+        // とりあえず叩けるか施行
+        await backlogApi.getSpace();
+
+        handleAPIKeySet(backlogSetting);
+        window.localStorage.setItem("backlogSetting", JSON.stringify(backlogSetting));
+        setErrorStr("");
+      } catch {
+        setErrorStr("認証エラーになりました");
+      }
+    })();
   }, [spaceId, apiKey, spacePostfix]);
+
+  /**
+   * 初回はローカルストレージから値を復元
+   */
+  useEffect(() => {
+    const localstorageData: BacklogSetting | "" = JSON.parse(localStorage.getItem("backlogSetting") || "");
+    if (localstorageData !== "") {
+      handleAPIKeySet(backlogSetting);
+    }
+  }, []);
 
   return (
     <LoginOuter>
@@ -46,6 +76,7 @@ export const LoginPage = ({ backlogSetting, handleAPIKeySet, handleAPIKeyChange 
             <Button onClick={tryLogin}>try</Button>
           </>
         ) : null}
+        {errorStr !== "" && <div>{errorStr}</div>}
       </LoginFrame>
     </LoginOuter>
   );
@@ -55,7 +86,6 @@ export const LoginContainer = () => {
   const backlog = useGlobalState("backlogSetting");
   const dispatch = useDispatch();
 
-  const handleAPIKeyChange = useCallback((value: string) => dispatch({ type: "UPDATE_BACKLOG_API_KEY", payload: value }), [dispatch]);
   const handleAPIKeySet = useCallback(
     (backlogSetting: BacklogSetting) => {
       dispatch({ type: "SET_BACKLOG", payload: backlogSetting });
@@ -64,5 +94,5 @@ export const LoginContainer = () => {
     [dispatch],
   );
 
-  return <LoginPage backlogSetting={backlog} handleAPIKeyChange={handleAPIKeyChange} handleAPIKeySet={handleAPIKeySet} />;
+  return <LoginPage backlogSetting={backlog} handleAPIKeySet={handleAPIKeySet} />;
 };

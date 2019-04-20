@@ -11,3 +11,5 @@ const apiKey = process.env.REACT_APP_API_KEY || "";
 
 // Use API Key
 export const backlogApi = new backlogjs.Backlog({ host, apiKey });
+
+export const backlogCreater = (host: string, apiKey: string) => new backlogjs.Backlog({ host, apiKey });
