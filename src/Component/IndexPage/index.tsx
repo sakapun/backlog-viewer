@@ -7,9 +7,10 @@ import { buildDataGridRows, buildIssueValues, Issue, OriginalIssueType, sortIssu
 import { buildSelectProps, Project } from "../../domain/project";
 import { backlogApi } from "../../lib/backlog-settings";
 import { Button } from "../Button";
+import { Header } from "../Header";
+import { LoginPage } from "../LoginPage";
 import { NumberFormatter } from "../NumberFormatter";
 import { AppOuter, ContentOuter, ControlArea, HeaderOuter, MainOuter, SidebarContent, SidebarOuter } from "./element";
-import {Header} from "../Header";
 
 type IndexStateTypes = {
   projects: Project[];
@@ -57,6 +58,9 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
               <ControlArea>
                 <div>データの更新</div>
                 <Button onClick={this.onClickReload}>更新</Button>
+              </ControlArea>
+              <ControlArea>
+                <LoginPage />
               </ControlArea>
             </SidebarContent>
           </SidebarOuter>
