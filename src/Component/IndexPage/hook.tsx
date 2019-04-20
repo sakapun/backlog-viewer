@@ -13,9 +13,10 @@ import { ContentOuter, ControlArea, SidebarContent, SidebarOuter } from "./eleme
 
 export type HooksType = {
   projects: Project[];
+  projectHasCustomFields: number[];
 };
 
-export const Hooks = ({ projects }: HooksType) => {
+export const Hooks = ({ projects, projectHasCustomFields }: HooksType) => {
   const [a, seta] = useState<number>(1);
   const [b, setb] = useState<number>(1);
   useEffect(() => console.log(123), [a]);
@@ -25,13 +26,15 @@ export const Hooks = ({ projects }: HooksType) => {
     <>
       <SidebarOuter>
         <SidebarContent>
-          <ControlArea>afasdf</ControlArea>
+          <ControlArea>
+            <Select options={buildSelectProps(projects)} />
+          </ControlArea>
           <button onClick={countUp}>up: {a}</button>
           <button onClick={countDown}>up: {b}</button>
         </SidebarContent>
       </SidebarOuter>
       <ContentOuter>
-        <pre>{projects.toString()}</pre>
+        <pre>{projectHasCustomFields.toString()}{projects.toString()}</pre>
       </ContentOuter>
     </>
   );
@@ -39,14 +42,35 @@ export const Hooks = ({ projects }: HooksType) => {
 
 export const HooksContainerz = () => {
   const dispatch = useDispatch();
-  const projects = useGlobalState("projects");
-
   // 初期化
   useEffect(() => {
     (async () => {
-      const projects = await backlogApi.getProjects();
+      const projects: Project[] = await backlogApi.getProjects();
       dispatch({ type: "CONCAT_PROJECTS", payload: projects });
+
+      // カスタムフィールドで効果という項目があるののみ絞り込む
+      const customFields: CustomeFieldResponse[][] = await Promise.all(
+        projects.map((project) => {
+          return backlogApi.getCustomFields("" + project.id).then((res: CustomFieldOriginalResponse[]) => {
+            return res.map((r) => {
+              return {
+                ...r,
+                projectId: project.id,
+              };
+            });
+          });
+        }),
+      );
+      const cfids = customFields
+        .flat(1)
+        .filter((item) => item.name === "効果")
+        .map((item) => item.projectId);
+      dispatch({ type: "SET_CUSTOM_FIELD_IDS", payload: cfids });
     })();
   }, []);
-  return <Hooks projects={projects} />;
+
+  const projects = useGlobalState("projects");
+  const customFieldIds = useGlobalState("customFieldIds");
+
+  return <Hooks projects={projects} projectHasCustomFields={customFieldIds} />;
 };

@@ -1,3 +1,4 @@
+import { act } from "react-dom/test-utils";
 import { Project } from "../../domain/project";
 import { initialState as backlogState } from "./backlog";
 
@@ -5,6 +6,7 @@ export const defaultState = {
   ok: true,
   backlogState,
   projects: [] as Project[],
+  customFieldIds: [] as number[],
 };
 
 export type State = typeof defaultState;
@@ -14,7 +16,8 @@ export type Action =
   | { type: "yes" }
   | { type: "SET_BACKLOG" }
   | { type: "UPDATE_BACKLOG_API_KEY"; payload: string }
-  | { type: "CONCAT_PROJECTS"; payload: Project[] };
+  | { type: "CONCAT_PROJECTS"; payload: Project[] }
+  | { type: "SET_CUSTOM_FIELD_IDS"; payload: number[] };
 
 export const reducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -51,6 +54,11 @@ export const reducer = (state: State, action: Action) => {
       return {
         ...state,
         projects: state.projects.concat(action.payload),
+      };
+    case "SET_CUSTOM_FIELD_IDS":
+      return {
+        ...state,
+        customFieldIds: action.payload,
       };
     default:
       return state;
