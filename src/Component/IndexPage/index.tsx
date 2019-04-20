@@ -11,6 +11,7 @@ import { Header } from "../Header";
 import { LoginContainer } from "../LoginPage";
 import { NumberFormatter } from "../NumberFormatter";
 import { AppOuter, ContentOuter, ControlArea, HeaderOuter, MainOuter, SidebarContent, SidebarOuter } from "./element";
+import { Hooks } from "./hook";
 
 type IndexStateTypes = {
   projects: Project[];
@@ -46,27 +47,33 @@ export class IndexPage extends React.Component<any, IndexStateTypes, any> {
     return (
       <AppOuter>
         <HeaderOuter>
-          <Header />
+          <Header toggleMain={this.onToggleFilter}/>
         </HeaderOuter>
         <MainOuter>
-          <SidebarOuter>
-            <SidebarContent>
-              <ControlArea>
-                プロジェクトを選択してください
-                <Select options={buildSelectProps(projects)} onChange={this.handleChangeProject} />
-              </ControlArea>
-              <ControlArea>
-                <div>データの更新</div>
-                <Button onClick={this.onClickReload}>更新</Button>
-              </ControlArea>
-              <ControlArea>
-                <LoginContainer />
-              </ControlArea>
-            </SidebarContent>
-          </SidebarOuter>
-          <ContentOuter>
-            <AutoSizer>{({ width, height }) => this.renderGrid(width, height)}</AutoSizer>
-          </ContentOuter>
+          {this.state.isFiltered ? (
+            <Hooks />
+          ) : (
+            <>
+              <SidebarOuter>
+                <SidebarContent>
+                  <ControlArea>
+                    プロジェクトを選択してください
+                    <Select options={buildSelectProps(projects)} onChange={this.handleChangeProject} />
+                  </ControlArea>
+                  <ControlArea>
+                    <div>データの更新</div>
+                    <Button onClick={this.onClickReload}>更新</Button>
+                  </ControlArea>
+                  <ControlArea>
+                    <LoginContainer />
+                  </ControlArea>
+                </SidebarContent>
+              </SidebarOuter>
+              <ContentOuter>
+                <AutoSizer>{({ width, height }) => this.renderGrid(width, height)}</AutoSizer>
+              </ContentOuter>
+            </>
+          )}
         </MainOuter>
       </AppOuter>
     );
