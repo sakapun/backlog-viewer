@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDataGrid from "react-data-grid";
 import AutoSizer from "react-virtualized-auto-sizer";
-import { useGlobalState } from "../../application/provider";
-import { buildDataGridRows, Issue, sortIssue } from "../../domain/issue";
-import { NumberFormatter } from "../NumberFormatter";
+import { useGlobalState } from "../../../application/provider";
+import { buildDataGridRows, Issue, sortIssue } from "../../../domain/issue";
+import { NumberFormatter } from "../../component/NumberFormatter";
 
 export const IssueTableContainer = () => {
   const issues = useGlobalState("issues");

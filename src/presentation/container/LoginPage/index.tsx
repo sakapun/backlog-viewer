@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import { useDispatch, useGlobalState } from "../../application/";
-import { BacklogState } from "../../application/reducer/backlog";
+import { useDispatch, useGlobalState } from "../../../application";
+import { BacklogState } from "../../../application/reducer/backlog";
 
 export type LoginPageTypes = {
   backlog: BacklogState;

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { HEADER_HEIGHT } from "../IndexPage/element";
+import { HEADER_HEIGHT } from "../../container/IndexPage/element";
 
 export const Outer = styled.div`
   height: 100%;
