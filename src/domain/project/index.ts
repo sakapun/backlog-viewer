@@ -1,5 +1,3 @@
-import { ReactSelectProps } from "../../Component/IndexPage/type";
-
 export type Project = {
   id: number;
   name: string;
@@ -12,4 +10,9 @@ export const buildSelectProps = (projects: Project[]): ReactSelectProps[] => {
       label: project.name,
     };
   });
+};
+
+export type ReactSelectProps = {
+  value: number | string;
+  label: string;
 };

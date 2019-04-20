@@ -1,4 +1,3 @@
-import { act } from "react-dom/test-utils";
 import { Issue } from "../../domain/issue";
 import { Project } from "../../domain/project";
 import { initialState as backlogState } from "./backlog";
