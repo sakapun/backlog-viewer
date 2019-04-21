@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect } from "react";
 import Select from "react-select";
 import { useDispatch, useGlobalState } from "../../../application/provider";
+import { createInstanceOfBacklogApi } from "../../../domain/BacklogSetting";
 import { CustomeFieldResponse, CustomFieldOriginalResponse } from "../../../domain/CustomField";
 import { buildIssueValues, OriginalIssueType } from "../../../domain/issue";
 import { buildSelectProps, Project } from "../../../domain/project";
-import { backlogApi } from "../../../lib/backlog-settings";
 import { Button } from "../../component/Button";
 import { IssueTableContainer } from "../IssueTable";
 import { ContentOuter, ControlArea, SidebarContent, SidebarOuter } from "./element";
@@ -61,6 +61,9 @@ export const MainPageContainer = () => {
   const projects = useGlobalState("projects");
   const customFieldIds = useGlobalState("customFieldIds");
   const selectedProjectId = useGlobalState("selectedProjectId");
+  const backlogSetting = useGlobalState("backlogSetting");
+
+  const backlogApi = createInstanceOfBacklogApi(backlogSetting);
 
   const dispatch = useDispatch();
   // 初期化

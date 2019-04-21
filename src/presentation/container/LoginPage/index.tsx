@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 import { useDispatch, useGlobalState } from "../../../application";
-import { BacklogSetting, SpacePostfix } from "../../../domain/BacklogSetting";
-import { backlogCreater } from "../../../lib/backlog-settings";
+import { BacklogSetting, createInstanceOfBacklogApi, SpacePostfix } from "../../../domain/BacklogSetting";
 import { Button } from "../../component/Button";
 import { LoginFrame, LoginOuter, SelectWidth, SpaceNameInputArea } from "./element";
 
@@ -34,7 +33,7 @@ export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
    * ログインを施行し、成功だったら値を保存して課題画面へ
    */
   const tryLogin = useCallback(() => {
-    const backlogApi = backlogCreater(spaceId + spacePostfix, apiKey);
+    const backlogApi = createInstanceOfBacklogApi(backlogSetting);
     (async () => {
       try {
         // とりあえず叩けるか施行
@@ -55,7 +54,7 @@ export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
   useEffect(() => {
     const localstorageData: BacklogSetting | "" = JSON.parse(localStorage.getItem("backlogSetting") || "");
     if (localstorageData !== "") {
-      handleAPIKeySet(backlogSetting);
+      handleAPIKeySet(localstorageData);
     }
   }, []);
 

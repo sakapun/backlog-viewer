@@ -3,7 +3,6 @@ import { Issue } from "../../domain/issue";
 import { Project } from "../../domain/project";
 
 export const defaultState = {
-  ok: true,
   backlogSetting,
   projects: [] as Project[],
   customFieldIds: [] as number[],
