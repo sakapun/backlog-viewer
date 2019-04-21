@@ -1,58 +1,51 @@
+import { BacklogSetting, initialState as backlogSetting } from "../../domain/BacklogSetting";
 import { Issue } from "../../domain/issue";
 import { Project } from "../../domain/project";
-import { initialState as backlogState } from "./backlog";
 
 export const defaultState = {
-  ok: true,
-  backlogState,
+  backlogSetting,
   projects: [] as Project[],
   customFieldIds: [] as number[],
   issues: [] as Issue[],
   selectedProjectId: 0,
+  isSettingPage: true,
+  effectCustomFieldName: "効果",
 };
 
 export type State = typeof defaultState;
 
 export type Action =
-  | { type: "no" }
-  | { type: "yes" }
-  | { type: "SET_BACKLOG" }
+  | { type: "FINISH_SETTING" }
+  | { type: "SET_BACKLOG"; payload: BacklogSetting }
+  | { type: "CLEAR_BACKLOG" }
   | { type: "UPDATE_BACKLOG_API_KEY"; payload: string }
   | { type: "UPDATE_SELECTED_PROJECT_ID"; payload: number }
   | { type: "CONCAT_PROJECTS"; payload: Project[] }
   | { type: "SET_CUSTOM_FIELD_IDS"; payload: number[] }
-  | { type: "SET_ISSUES"; payload: Issue[] };
+  | { type: "SET_ISSUES"; payload: Issue[] }
+  | { type: "UPDATE_EFFECT_CUSTOM_FIELD_NAME"; payload: string };
 
-export const reducer = (state: State, action: Action) => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "no":
+    case "FINISH_SETTING":
       return {
         ...state,
-        ok: false,
+        isSettingPage: false,
       };
-    case "yes":
+    case "CLEAR_BACKLOG":
       return {
         ...state,
-        ok: true,
-      };
-    case "UPDATE_BACKLOG_API_KEY":
-      return {
-        ...state,
-        backlogState: {
-          ...state.backlogState,
-          editState: {
-            ...state.backlogState.editState,
-            apiKey: action.payload,
-          },
+        backlogSetting: {
+          apiKey: "",
+          spacePostfix: ".backlog.jp",
+          spaceId: "",
         },
+        isSettingPage: true,
       };
     case "SET_BACKLOG":
       return {
         ...state,
-        backlogState: {
-          ...state.backlogState,
-          origin: state.backlogState.editState,
-        },
+        backlogSetting: action.payload,
       };
     case "CONCAT_PROJECTS":
       return {
@@ -73,6 +66,11 @@ export const reducer = (state: State, action: Action) => {
       return {
         ...state,
         selectedProjectId: action.payload,
+      };
+    case "UPDATE_EFFECT_CUSTOM_FIELD_NAME":
+      return {
+        ...state,
+        effectCustomFieldName: action.payload,
       };
     default:
       return state;

@@ -9,7 +9,7 @@ export const AppOuter = styled.div`
   flex-direction: column;
 
   * {
-    box-sizing: border-box;
+    font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
   }
 `;
 

@@ -25,7 +25,7 @@ export type ExtraField = {
 };
 export type Issue = OriginalIssueType & ExtraField;
 
-export const buildIssueValues = (issues: OriginalIssueType[]): Issue[] => {
+export const buildIssueValues = (issues: OriginalIssueType[], cfName: string): Issue[] => {
   const useRatio = issueHoursRatio(issues);
   return issues.map((issue) => {
     const hoursRatio = issue.estimatedHours ? issue.estimatedHours / useRatio : 0;
@@ -33,7 +33,7 @@ export const buildIssueValues = (issues: OriginalIssueType[]): Issue[] => {
 
     const extraFields = issue.customFields.reduce(
       (tmp: ExtraField, customField: CustomField) => {
-        if (customField.name === "効果" && customField.value > 0) {
+        if (customField.name === cfName && customField.value > 0) {
           tmp.power = customField.value;
         }
         return tmp;
