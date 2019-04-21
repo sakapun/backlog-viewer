@@ -16,6 +16,7 @@ export type State = typeof defaultState;
 export type Action =
   | { type: "FINISH_SETTING" }
   | { type: "SET_BACKLOG"; payload: BacklogSetting }
+  | { type: "CLEAR_BACKLOG" }
   | { type: "UPDATE_BACKLOG_API_KEY"; payload: string }
   | { type: "UPDATE_SELECTED_PROJECT_ID"; payload: number }
   | { type: "CONCAT_PROJECTS"; payload: Project[] }
@@ -28,6 +29,16 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         isSettingPage: false,
+      };
+    case "CLEAR_BACKLOG":
+      return {
+        ...state,
+        backlogSetting: {
+          apiKey: "",
+          spacePostfix: ".backlog.jp",
+          spaceId: "",
+        },
+        isSettingPage: true,
       };
     case "SET_BACKLOG":
       return {

@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 import { useDispatch, useGlobalState } from "../../../application";
-import { BacklogSetting, createInstanceOfBacklogApi, SpacePostfix } from "../../../domain/BacklogSetting";
+import {
+  BACKLOG_API_LOCALSTORAGE_KEY_NAME,
+  BacklogSetting,
+  createInstanceOfBacklogApi,
+  SpacePostfix,
+} from "../../../domain/BacklogSetting";
 import { Button } from "../../component/Button";
 import { LoginFrame, LoginOuter, SelectWidth, SpaceNameInputArea } from "./element";
 
@@ -40,7 +45,7 @@ export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
         await backlogApi.getSpace();
 
         handleAPIKeySet(backlogSetting);
-        window.localStorage.setItem("backlogSetting", JSON.stringify(backlogSetting));
+        window.localStorage.setItem(BACKLOG_API_LOCALSTORAGE_KEY_NAME, JSON.stringify(backlogSetting));
         setErrorStr("");
       } catch {
         setErrorStr("認証エラーになりました");
@@ -52,8 +57,8 @@ export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
    * 初回はローカルストレージから値を復元
    */
   useEffect(() => {
-    const localstorageData: BacklogSetting | "" = JSON.parse(localStorage.getItem("backlogSetting") || "");
-    if (localstorageData !== "") {
+    const localstorageData: BacklogSetting | null = JSON.parse(localStorage.getItem(BACKLOG_API_LOCALSTORAGE_KEY_NAME) || "null");
+    if (localstorageData !== null) {
       handleAPIKeySet(localstorageData);
     }
   }, []);
@@ -63,7 +68,7 @@ export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
       <LoginFrame>
         <SpaceNameInputArea>
           <span>https://</span>
-          <input value={spaceId} onChange={useCallback((ev: any) => updateSpaceId(ev.target.value), [])} />
+          <input name={"spaceId"} type={"text"} value={spaceId} onChange={useCallback((ev: any) => updateSpaceId(ev.target.value), [])} />
           <SelectWidth>
             <Select defaultValue={options[0]} options={options} onChange={useCallback((ev: any) => updatePostfix(ev.value), [])} />
           </SelectWidth>

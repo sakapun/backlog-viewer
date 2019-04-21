@@ -6,6 +6,7 @@ import "isomorphic-form-data";
 es6promise.polyfill();
 
 export type SpacePostfix = ".backlog.jp" | ".backlog.com";
+export const BACKLOG_API_LOCALSTORAGE_KEY_NAME = "backlogSetting";
 
 export type BacklogSetting = {
   spaceId: string;
