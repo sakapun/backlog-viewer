@@ -1,4 +1,6 @@
+import { ThemeProvider } from "emotion-theming";
 import React, { createContext, useContext, useReducer } from "react";
+import UiTheme from "./UiTheme";
 
 import { Action, defaultState, reducer, State } from "../reducer";
 
@@ -10,7 +12,9 @@ export const Provider: React.ComponentType = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, defaultState);
   return (
     <dispatchContext.Provider value={dispatch}>
-      <stateContext.Provider value={state}>{children}</stateContext.Provider>
+      <stateContext.Provider value={state}>
+        <ThemeProvider theme={UiTheme}>{children}</ThemeProvider>
+      </stateContext.Provider>
     </dispatchContext.Provider>
   );
 };
