@@ -1,14 +1,14 @@
+import { Alert, Button, Input } from "@smooth-ui/core-em";
 import React, { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
-import { useDispatch, useGlobalState } from "../../../application";
+import { useDispatch, useGlobalState } from "../../../application/provider";
 import {
   BACKLOG_API_LOCALSTORAGE_KEY_NAME,
   BacklogSetting,
   createInstanceOfBacklogApi,
   SpacePostfix,
 } from "../../../domain/BacklogSetting";
-import { Button } from "../../component/Button";
-import { LoginFrame, LoginOuter, SelectWidth, SpaceNameInputArea } from "./element";
+import { LoginFrame, LoginOuter, SpaceNameBox, SpaceNameInputArea } from "./element";
 
 export type LoginPageTypes = {
   backlogSetting: BacklogSetting;
@@ -33,6 +33,7 @@ export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
    * DOMイベント
    */
   const handleUpdateApiKey = useCallback((ev: any) => updateApiKey(ev.target.value), []);
+  const handleClickNext = useCallback(() => changeStepOneDone(true), []);
 
   /**
    * ログインを施行し、成功だったら値を保存して課題画面へ
@@ -48,7 +49,7 @@ export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
         window.localStorage.setItem(BACKLOG_API_LOCALSTORAGE_KEY_NAME, JSON.stringify(backlogSetting));
         setErrorStr("");
       } catch {
-        setErrorStr("認証エラーになりました");
+        setErrorStr("認証エラーです");
       }
     })();
   }, [spaceId, apiKey, spacePostfix]);
@@ -67,20 +68,31 @@ export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
     <LoginOuter>
       <LoginFrame>
         <SpaceNameInputArea>
-          <span>https://</span>
-          <input name={"spaceId"} type={"text"} value={spaceId} onChange={useCallback((ev: any) => updateSpaceId(ev.target.value), [])} />
-          <SelectWidth>
-            <Select defaultValue={options[0]} options={options} onChange={useCallback((ev: any) => updatePostfix(ev.value), [])} />
-          </SelectWidth>
-          <button onClick={useCallback(() => changeStepOneDone(true), [])}>next</button>
+          <SpaceNameBox>
+            <span>https://</span>
+          </SpaceNameBox>
+          <SpaceNameBox>
+            <Input name={"spaceId"} value={spaceId} onChange={useCallback((ev: any) => updateSpaceId(ev.target.value), [])} />
+          </SpaceNameBox>
+          <SpaceNameBox style={{ flexGrow: 1 }}>
+            <div style={{ width: "100%" }}>
+              <Select defaultValue={options[0]} options={options} onChange={useCallback((ev: any) => updatePostfix(ev.value), [])} />
+            </div>
+          </SpaceNameBox>
         </SpaceNameInputArea>
         {isStepOneDone ? (
           <>
-            <input value={apiKey} onChange={handleUpdateApiKey} />
-            <Button onClick={tryLogin}>try</Button>
+            <Input value={apiKey} onChange={handleUpdateApiKey} />
+            <Button onClick={tryLogin} zIndex={0}>
+              try
+            </Button>
           </>
-        ) : null}
-        {errorStr !== "" && <div>{errorStr}</div>}
+        ) : (
+          <Button onClick={handleClickNext} disabled={spaceId === ""} zIndex={0}>
+            next
+          </Button>
+        )}
+        {errorStr !== "" && <Alert variant="danger">{errorStr}</Alert>}
       </LoginFrame>
     </LoginOuter>
   );

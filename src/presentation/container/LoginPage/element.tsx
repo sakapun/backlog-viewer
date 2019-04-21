@@ -24,8 +24,17 @@ export const LoginFrame = styled.div`
 
 export const SpaceNameInputArea = styled.div`
   display: flex;
+  height: 50px;
 `;
 
-export const SelectWidth = styled.div`
-  width: 300px;
+export const SpaceNameBox = styled.div`
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+
+  margin-right: 15px;
+  &:last-child {
+    margin-right: 0px;
+  }
 `;

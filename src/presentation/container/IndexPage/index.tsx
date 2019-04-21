@@ -1,3 +1,4 @@
+import { Normalize } from "@smooth-ui/core-em";
 import React from "react";
 import { useGlobalState } from "../../../application/provider";
 import { Header } from "../../component/Header";
@@ -11,6 +12,7 @@ export type IndexComponentType = {
 export const IndexPageComponent = ({ isSettingPage }: IndexComponentType) => {
   return (
     <AppOuter>
+      <Normalize />
       <HeaderOuter>
         <Header />
       </HeaderOuter>

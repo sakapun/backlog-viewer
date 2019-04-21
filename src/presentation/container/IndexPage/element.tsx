@@ -7,10 +7,6 @@ export const AppOuter = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-
-  * {
-    box-sizing: border-box;
-  }
 `;
 
 export const HeaderOuter = styled.div`
