@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect } from "react";
+import { Box, Input } from "@smooth-ui/core-em";
+import React, { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 import { useDispatch, useGlobalState } from "../../../application/provider";
 import { createInstanceOfBacklogApi } from "../../../domain/BacklogSetting";
@@ -7,16 +8,27 @@ import { buildIssueValues, OriginalIssueType } from "../../../domain/issue";
 import { buildSelectProps, Project } from "../../../domain/project";
 import { Button } from "../../component/Button";
 import { IssueTableContainer } from "../IssueTable";
-import { ContentOuter, ControlArea, SidebarContent, SidebarOuter } from "./element";
+import { ContentOuter, SidebarContent, SidebarOuter } from "./element";
 
 export type HooksType = {
   projects: Project[];
   projectHasCustomFields: number[];
   loadIssues: (projectId: number) => void;
   selectedProjectId: number;
+  effectCustomFieldName: string;
+  handleEffectCustomFieldName: (s: string) => void;
 };
 
-export const Hooks = ({ projects, projectHasCustomFields, loadIssues, selectedProjectId }: HooksType) => {
+export const Hooks = ({
+  projects,
+  projectHasCustomFields,
+  loadIssues,
+  selectedProjectId,
+  effectCustomFieldName,
+  handleEffectCustomFieldName,
+}: HooksType) => {
+  const [fieldName, updateFieldName] = useState(effectCustomFieldName);
+
   /**
    * プロジェクトを選択したときの関数
    */
@@ -32,21 +44,35 @@ export const Hooks = ({ projects, projectHasCustomFields, loadIssues, selectedPr
    */
   const reloadIssues = useCallback(() => loadIssues(selectedProjectId), [selectedProjectId]);
 
+  const handleUpdateFieldName = useCallback((ev: any) => updateFieldName(ev.target.value), []);
+  const handleEnterFieldName = useCallback(() => handleEffectCustomFieldName(fieldName), [fieldName]);
+
   const filteredProjects = projects.filter((p) => projectHasCustomFields.includes(p.id));
   return (
     <>
       <SidebarOuter>
         <SidebarContent>
-          <ControlArea>
+          <Box mb={4}>
             <div>
               <span>プロジェクトを選択してください</span>
             </div>
             <Select options={buildSelectProps(filteredProjects)} onChange={changeHook} />
-          </ControlArea>
-          <ControlArea>
+          </Box>
+          <Box mb={4}>
             <div>データの更新</div>
-            <Button onClick={reloadIssues}>更新</Button>
-          </ControlArea>
+            <Button onClick={reloadIssues} width={1}>
+              更新
+            </Button>
+          </Box>
+          <Box>
+            <div>対象カスタムフィールド名</div>
+            <Box display={"flex"}>
+              <Input value={fieldName} onChange={handleUpdateFieldName} width={0.65} mr={2} />
+              <Button onClick={handleEnterFieldName} width={0.3}>
+                設定
+              </Button>
+            </Box>
+          </Box>
         </SidebarContent>
       </SidebarOuter>
       <ContentOuter>
@@ -62,6 +88,7 @@ export const MainPageContainer = () => {
   const customFieldIds = useGlobalState("customFieldIds");
   const selectedProjectId = useGlobalState("selectedProjectId");
   const backlogSetting = useGlobalState("backlogSetting");
+  const effectCustomFieldName = useGlobalState("effectCustomFieldName");
 
   const backlogApi = createInstanceOfBacklogApi(backlogSetting);
 
@@ -87,11 +114,11 @@ export const MainPageContainer = () => {
       );
       const cfids = customFields
         .flat(1)
-        .filter((item) => item.name === "効果")
+        .filter((item) => item.name === effectCustomFieldName)
         .map((item) => item.projectId);
       dispatch({ type: "SET_CUSTOM_FIELD_IDS", payload: cfids });
     })();
-  }, []);
+  }, [effectCustomFieldName]);
 
   // action
   const loadIssues = (projectId: number) => {
@@ -104,11 +131,23 @@ export const MainPageContainer = () => {
         count: 100,
       })
       .then((issues: OriginalIssueType[]) => {
-        dispatch({ type: "SET_ISSUES", payload: buildIssueValues(issues) });
+        dispatch({ type: "SET_ISSUES", payload: buildIssueValues(issues, effectCustomFieldName) });
       });
   };
 
+  const handleEffectCustomFieldName = useCallback(
+    (value: string) => dispatch({ type: "UPDATE_EFFECT_CUSTOM_FIELD_NAME", payload: value }),
+    [],
+  );
+
   return (
-    <Hooks projects={projects} projectHasCustomFields={customFieldIds} loadIssues={loadIssues} selectedProjectId={selectedProjectId} />
+    <Hooks
+      projects={projects}
+      projectHasCustomFields={customFieldIds}
+      effectCustomFieldName={effectCustomFieldName}
+      loadIssues={loadIssues}
+      selectedProjectId={selectedProjectId}
+      handleEffectCustomFieldName={handleEffectCustomFieldName}
+    />
   );
 };

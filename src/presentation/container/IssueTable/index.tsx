@@ -3,14 +3,20 @@ import ReactDataGrid from "react-data-grid";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { useGlobalState } from "../../../application/provider";
 import { buildDataGridRows, Issue, sortIssue } from "../../../domain/issue";
-import { NumberFormatter } from "../../component/NumberFormatter";
+import { issueKeyFormatCreator, numberFormatter } from "./TableFormatter";
 
 export const IssueTableContainer = () => {
   const issues = useGlobalState("issues");
-  return <IssueTable issues={issues} />;
+  const backlogSetting = useGlobalState("backlogSetting");
+
+  return <IssueTable issues={issues} hostDomain={backlogSetting.spaceId + backlogSetting.spacePostfix} />;
 };
 
-export const IssueTable = ({ issues }: { issues: Issue[] }) => {
+export type IssueTableType = {
+  issues: Issue[];
+  hostDomain: string;
+};
+export const IssueTable = ({ issues, hostDomain }: IssueTableType) => {
   const columns = [
     {
       key: "issueKey",
@@ -19,14 +25,14 @@ export const IssueTable = ({ issues }: { issues: Issue[] }) => {
       sortable: true,
       width: 110,
       sortDescendingFirst: false,
-      formatter: IssueKeyFormatter,
+      formatter: issueKeyFormatCreator(hostDomain),
     },
     { key: "title", name: "Title", editable: false, sortable: true },
-    { key: "priorityScore", name: "優先度スコア", editable: false, width: 110, formatter: NumberFormatter },
-    { key: "power", name: "効果", editable: false, width: 110, formatter: NumberFormatter },
-    { key: "priorityValue", name: "優先度３段階", editable: false, width: 110, formatter: NumberFormatter },
-    { key: "estimatedHours", name: "見積時間", editable: false, width: 110, formatter: NumberFormatter },
-    { key: "hoursRatio", name: "コスト比率", editable: false, width: 110, formatter: NumberFormatter },
+    { key: "priorityScore", name: "優先度スコア", editable: false, width: 110, formatter: numberFormatter },
+    { key: "power", name: "効果", editable: false, width: 110, formatter: numberFormatter },
+    { key: "priorityValue", name: "優先度３段階", editable: false, width: 110, formatter: numberFormatter },
+    { key: "estimatedHours", name: "見積時間", editable: false, width: 110, formatter: numberFormatter },
+    { key: "hoursRatio", name: "コスト比率", editable: false, width: 110, formatter: numberFormatter },
   ];
 
   const rows = buildDataGridRows(sortIssue(issues));
@@ -40,18 +46,9 @@ export const IssueTable = ({ issues }: { issues: Issue[] }) => {
           enableCellSelect={true}
           columns={columns}
           rowsCount={rows.length}
-          onGridSort={(sortColumn, sortDirection) => console.log(sortColumn, sortDirection)}
           rowGetter={(i: number) => rows[i]}
         />
       )}
     </AutoSizer>
-  );
-};
-
-const IssueKeyFormatter = ({ value }: { value: string }) => {
-  return (
-    <a href={"https://vegetalia.backlog.jp/view/" + value} target={"_blank"}>
-      {value}
-    </a>
   );
 };

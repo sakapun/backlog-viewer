@@ -68,7 +68,7 @@ export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
   return (
     <LoginOuter>
       <LoginFrame>
-        <Box mb={30}>
+        <Box mb={4}>
           <div>
             <span>Backlog スペースID</span>
           </div>
@@ -86,15 +86,15 @@ export const LoginPage = ({ handleAPIKeySet }: LoginPageTypes) => {
             </SpaceNameBox>
           </SpaceNameInputArea>
           {isStepOneDone || (
-            <Button onClick={handleClickNext} disabled={spaceId === ""} width={1} mt={15}>
+            <Button onClick={handleClickNext} disabled={spaceId === ""} width={1} mt={2}>
               next
             </Button>
           )}
         </Box>
         {isStepOneDone ? (
-          <Box mb={45} width={1}>
+          <Box mb={6} width={1}>
             <div>API Key</div>
-            <Input value={apiKey} onChange={handleUpdateApiKey} display={"block"} width={1} mb={10}/>
+            <Input value={apiKey} onChange={handleUpdateApiKey} display={"block"} width={1} mb={2} />
             <Button onClick={tryLogin} disabled={apiKey === "" || spaceId === ""} width={1}>
               try
             </Button>

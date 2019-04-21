@@ -9,6 +9,7 @@ export const defaultState = {
   issues: [] as Issue[],
   selectedProjectId: 0,
   isSettingPage: true,
+  effectCustomFieldName: "効果",
 };
 
 export type State = typeof defaultState;
@@ -21,7 +22,8 @@ export type Action =
   | { type: "UPDATE_SELECTED_PROJECT_ID"; payload: number }
   | { type: "CONCAT_PROJECTS"; payload: Project[] }
   | { type: "SET_CUSTOM_FIELD_IDS"; payload: number[] }
-  | { type: "SET_ISSUES"; payload: Issue[] };
+  | { type: "SET_ISSUES"; payload: Issue[] }
+  | { type: "UPDATE_EFFECT_CUSTOM_FIELD_NAME"; payload: string };
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -64,6 +66,11 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         selectedProjectId: action.payload,
+      };
+    case "UPDATE_EFFECT_CUSTOM_FIELD_NAME":
+      return {
+        ...state,
+        effectCustomFieldName: action.payload,
       };
     default:
       return state;

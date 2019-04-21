@@ -12,28 +12,20 @@ export const LoginFrame = styled.div`
   width: 500px;
   height: 400px;
   margin: auto;
-  display: flex;
-  flex-direction: column;
-  /*
-  background: #fffffc;
-  border-radius: 15px;
-  border: 1px solid #b09e99;
-  box-shadow: #b09e997a 0px 0px 4px 2px;
-  */
 `;
 
 export const SpaceNameInputArea = styled.div`
   display: flex;
-  height: 50px;
+  height: 40px;
 `;
 
 export const SpaceNameBox = styled.div`
-  height: 50px;
+  height: 40px;
 
   display: flex;
   align-items: center;
 
-  margin-right: 15px;
+  margin-right: 16px;
   &:last-child {
     margin-right: 0px;
   }
