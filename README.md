@@ -1,44 +1,24 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Backlog Priority Viewer  
+  
+  
+## 動機  
+  
+Backlogは優れたツールだが、課題の優先順位を詳しく設定することはできない。  
+そのため、どの課題が優先順位が高いかを把握するためには少し大変だった。  
+Backlogのみで管理したかったが、スコアの計算機能は機能としてなかったのでAPIを用いて作った。  
+  
+  
+## 使い方  
 
-## Available Scripts
+1. Backlogで効果というカスタム属性を作る。入力値は数字にする。1～5に絞るのをおすすめする。  
+2. 課題に「効果」、「優先度」、「予定時間」の値を入力する。  
+    予定時間は時間計算でも人日でも良いが、プロジェクトで統一すること  
+3. 自分のアイコン→個人設定→APIで、APIキーを発行する。  
+4. APIキーを用いてアプリにログインする  
 
-In the project directory, you can run:
+## 機能  
 
-### `npm start`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- (効果 × 優先度) - コスト比によって課題の優先順位を表示する  
+- 優先度は低～高が1～3で計算される  
+- コスト比は一番高い予定時間を5として、時間の相対比をスコアとする  
+  
