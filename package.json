@@ -15,7 +15,6 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-select": "^2.0.16",
     "@types/react-virtualized-auto-sizer": "^1.0.0",
-    "axios": "^0.18.0",
     "backlog-js": "^0.9.1",
     "emotion-theming": "^10.0.10",
     "es6-promise": "^4.2.6",

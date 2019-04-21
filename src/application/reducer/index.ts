@@ -1,6 +1,6 @@
 import { BacklogSetting, initialState as backlogSetting } from "../../domain/BacklogSetting";
-import { Issue } from "../../domain/issue";
-import { Project } from "../../domain/project";
+import { Issue } from "../../domain/Issue";
+import { Project } from "../../domain/Project";
 
 export const defaultState = {
   backlogSetting,

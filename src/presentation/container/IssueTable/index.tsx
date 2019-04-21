@@ -2,7 +2,7 @@ import React from "react";
 import ReactDataGrid from "react-data-grid";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { useGlobalState } from "../../../application/provider";
-import { buildDataGridRows, Issue, sortIssue } from "../../../domain/issue";
+import { buildDataGridRows, Issue, sortIssue } from "../../../domain/Issue";
 import { issueKeyFormatCreator, numberFormatter } from "./TableFormatter";
 
 export const IssueTableContainer = () => {

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Row } from "../datagrid";
+import { Row } from "../DataGrid";
 
 export type CustomField = {
   name: string;
